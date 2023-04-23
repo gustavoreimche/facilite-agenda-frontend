@@ -1,0 +1,782 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  justify-content: center;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+html{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+:root {
+  font-family: 'Roboto';
+  line-height: 1.5;
+  font-weight: 500;
+
+  color-scheme: light dark;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #ffffff;
+
+  width: 100vw;
+  height: 100vh;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+@font-face {
+  font-family: 'Sofia', sans-serif;
+  src: url('https://fonts.googleapis.com/css?family=Audiowide|Sofia|Trirong') format('truetype');
+}
+
+#root{
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  justify-content: center;
+}
+
+.chk input{
+  display: none;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  
+}
+
+.header{
+  display: flex;
+  flex-direction: row;
+  font-size: large;
+  padding: 0 10px;
+  border-radius: 20px;
+  background-color: inherit;
+  color: white;
+
+}
+
+.menu-svg{
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.body{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 10px 0 10px;  
+}
+
+.menu{
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.mes-semana{
+  width: 200px;
+}
+.month{
+  margin-bottom: 0;
+  font-family: "Sofia", sans-serif;
+  font-size: 50px;
+  margin: 0px;
+
+}
+
+.week{
+  margin-top: -10px;
+  margin-bottom: 8px;
+}
+
+.dias{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+h1.day{
+  width: 100px;
+  margin: 0;
+}
+
+.icon{
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.col-hora{
+  display: flex;
+  flex: 0.2;
+  height: inherit;
+  margin-right: 10px;
+  align-items: center;
+
+}
+col.hora.hora{
+  display: flex;
+  height: inherit;
+  flex: 0.5;
+  align-items: initial;
+  border: none;
+}
+
+.header .row{
+  border: none;
+  background-color: inherit;
+}
+
+.separator-div{
+  height: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+.separator{
+  width: 6px;
+  height: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.col-nome{
+  display: flex;
+  height: inherit;
+  align-items: center;
+  flex: 0.7;
+}
+.header .col-nome{
+  justify-content: center;
+}
+.col-service{
+  display: flex;
+  justify-content: left;
+  flex: 1;
+  height: inherit;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  justify-items: center;
+}
+.col-price{
+  display: flex;
+  flex: 0.6;
+  justify-content: start;
+  height: inherit;
+  align-items: center;
+  justify-content: center;
+}
+.col-pag{
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  flex: 0.3;
+  margin: 0;
+  justify-content:  center;
+}
+
+.row-pag{
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  justify-content: end;
+  flex: 0.3;
+  height: inherit;
+  align-items: center;
+  margin-top: -3px;
+}
+
+
+.close{
+  display: flex;
+  justify-content: right;
+}
+
+.row-titulo{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.grow1{
+  flex: 1;
+}
+
+.titulo{
+  font-size: 20px;
+  color: inherit
+}
+
+.label{
+  color: inherit;
+}
+
+.svg-close{ 
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.div-cadastrar-button{
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+.cadastrar-button{
+  width: auto;
+  height: max-content;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  background-color: #209239;
+  color: white;
+  border: none;
+}
+
+.cadastrar-button:hover{
+  background-color: #126925;
+}
+.excluir-button{
+  background-color: #680a0a;
+  color: white;
+  border: none;
+}
+.cadastrar-button:hover{
+  background-color: #494949;
+}
+.modal {
+  position: relative;
+  top: calc(50% - 180px);
+  margin: auto;
+  padding: 20px;
+  width: 50vw;
+  height: 320px;
+  border: none;
+  padding: 20px;
+  color: white;
+  border-radius: 20px;
+  box-shadow: #494949;
+  
+}
+
+input[type=text]{
+  background-color: white;
+  border: none;
+  width: 100%;
+}
+
+input[type=number]{
+  background-color: white;
+  width: 100%;
+  border: none;
+}
+
+.modal2 {
+  position: relative;
+  top: calc(50% - 180px);
+  margin: auto;
+  width: max-content;
+  height: fit-content;
+  border: none;
+  background-color: #888;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-despesa {
+  position: relative;
+  top: calc(50% - 135px);
+  margin: auto;
+  border: none;
+  padding: 20px;
+  width: 50vw;
+  height: 230px;
+  background-color: #888;
+  border-radius: 20px;
+  padding: 20px;
+  color: white;
+}
+
+.modal-despesas {
+  position: relative;
+  top: 50px;
+  margin: auto;
+  padding: 20px;
+  width: 600px;
+  border: none;
+  height: max-content;
+  background-color: inherit;
+  border-radius: 20px;
+  padding: 20px;
+  color: white;
+}
+
+.body-despesa{
+  background-color: white;
+  height: calc(100%);
+  color: black;
+  border-radius: 0 0 15px 15px;
+  padding: 0px 10px;
+}
+
+.row-title{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 17px;
+  background-color: inherit;
+}
+
+.row-title .descricao-despesa{
+  text-align: center;
+}
+
+.row-title .valor-despesa{
+  text-align: center;
+}
+
+.row-title .data-despesa{
+  text-align: center;
+}
+
+.row-title-total {
+  display: flex;
+  flex-direction: row;
+}
+
+.data-total {
+  text-align: center;
+  flex: 1;
+}
+
+.entradas-total {
+  text-align: center;
+  flex: 2;
+}
+
+.despesas-total {
+  text-align: center;
+  flex: 2;
+}
+
+.total-total {
+  text-align: center;
+  flex: 2;
+}
+
+.row-despesa{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid #444;
+  padding-bottom: 2px;
+  padding-top: 5px;
+}
+
+.descricao-despesa{
+  flex: 2;
+}
+
+.valor-despesa{
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+
+.data-despesa{
+  flex: 1;
+  text-align: center;
+}
+.excluir{
+  flex: 0.1;
+}
+.button-excluir-despesa{
+  margin: 0;
+  padding: 0;
+  height: 24px;
+}
+
+.react-calendar{
+  width: 490px;
+  height: 340px;
+  font-size: 18px;
+  font-family: inherit
+} 
+
+.react-calendar__month-view__weekdays{
+  font-size: 18px;
+}
+
+.react-calendar__tile.react-calendar__month-view__days__day.react-calendar__month-view__days__day--neighboringMonth, 
+.react-calendar__tile.react-calendar__month-view__days__day.react-calendar__month-view__days__day--weekend,
+.react-calendar__tile.react-calendar__month-view__days__day{
+  align-items: center;
+  height: 45px;
+  padding: 0px;
+}
+
+.react-calendar__navigation{
+  padding-top: 10px;
+  text-align: center;
+}
+
+
+.react-calendar__navigation__label__labelText.react-calendar__navigation__label__labelText--from{
+  text-transform: uppercase;
+}
+.react-calendar__navigation__label {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+}
+
+.react-calendar__navigation__arrow.react-calendar__navigation__prev2-button,
+.react-calendar__navigation__arrow.react-calendar__navigation__prev-button,
+.react-calendar__navigation__arrow.react-calendar__navigation__next-button,
+.react-calendar__navigation__arrow.react-calendar__navigation__next2-button {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  font-size: 25px;
+
+}
+
+.modal-area{
+  display: contents;
+  width: 100%;
+  height: 100%;
+}
+
+input{
+  width: 100%;
+  height: 30px;
+  font-size: 100%;
+  font-family: inherit;
+  color: black
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(87, 86, 86, 0.8);
+}
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 200ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open{
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close{
+  opacity: 0;
+}
+.row{
+  width: 100%;
+  height: 26.6px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 0.5px solid #bbb;
+}
+.col{
+  width: 200px;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  
+}
+
+.dias h1{
+  cursor: pointer;
+}
+
+button{
+  width: 100%;
+  color: inherit;
+  padding: 0;
+  height: inherit;
+  text-align: left;
+  font-size: 1em;
+  font-family: inherit;
+  cursor: pointer;
+  background-color: inherit;
+  border: none;
+}
+button:hover {
+  background-color: #ffffff;
+
+}
+
+svg{
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+#pix, #card, #money{
+  margin: 0;
+  margin-top: 5px;
+  width: 15px;
+  height: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.title{
+  display: flex;
+  flex-direction: row;
+  color: inherit;
+  padding: 0 10px;
+}
+.day{
+  width: 100%;
+  margin-right: 100px;
+  text-align: center;
+  
+}
+.month{
+  text-align: left;
+}
+.svg-pag, .svg-pag-money{
+  margin-left: 15px;
+}
+
+.svg-pag-money{
+  margin-right: 7px;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+  align-items: center;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.footer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 10px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.footer label{
+  color: inherit;
+}
+
+.entradas, .despesas{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+  flex: 1;
+}
+.despesas, .pag-card, .pag-money{
+  background-color: inherit;
+  margin-left: 30px;
+}
+
+.total {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding: 0 10px;
+}
+
+.pag-pix, .pag-card, .pag-money{
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 4px;
+  justify-content: end;
+  flex: 1;
+}
+
+.entradas-label, .despesas-label, .total-label{
+  padding-right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.despesas-label, .despesas-valor{
+  cursor: pointer;
+}
+
+
+.valor-entradas, .despesas-valor {
+  background-color: inherit;
+  border-radius: 20px;
+  text-align: center;
+  padding: 5px;
+  height: max-content;
+  width: 150px;
+}
+
+.total-valor{
+  background-color: inherit;
+  color: white;
+  border-radius: 20px;
+  text-align: center;
+  padding: 5px;
+  width: 150px;
+
+}
+
+
+/* button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+} */
+/* button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+} */
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: inherit;
+  }
+}
+
+@media screen and (max-width: 985px) {
+  .div-principal{
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+  .valor-entradas, .despesas-valor {
+    background-color: #f2d3d6;
+    border-radius: 20px;
+    text-align: center;
+    padding: 5px;
+    height: max-content;
+    width: 100px;
+  }
+  
+  .total-valor{
+    background-color: inherit;
+    color: white;
+    border-radius: 20px;
+    text-align: center;
+    padding: 5px;
+    width: 100px;
+  
+  }
+}
+
+@media screen and (max-width: 450px) {
+    .col-pag, .row-pag{
+      display: none;
+    }
+    .div-principal{
+      font-size: 13px;
+    }
+    .body{
+      padding: 0;
+      margin: auto;
+      font-size: 12px;
+    }
+    .header{
+      font-size: 15px;
+      padding: 0;
+    }
+    .header .col-nome{
+      margin-left: 40px;
+    }
+    .col-hora{
+      flex: none;
+    }
+    .col-hora.hora {
+      width: 2px;
+    }
+    .title {
+      font-size: 10px;
+      align-items: center;
+      padding-left: 2px;
+      padding-right: 2px;
+    }
+    .mes-semana{
+      width: 50px;
+    }
+    .dias svg {
+      width: 15px;
+      height: 15px;
+    }
+    .menu{
+      width: 25px;
+      height: 25px;
+    }
+    .month{
+      font-size: 25px;
+      margin-top: 5px;
+    }
+    .week{
+      font-size: 10px;
+    }
+}

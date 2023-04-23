@@ -434,7 +434,7 @@ input[type=number]{
   width: 490px;
   height: 340px;
   font-size: 18px;
-  font-family: inherit
+  font-family: 'Roboto';
 } 
 
 .react-calendar__month-view__weekdays{

@@ -378,22 +378,57 @@ input[type=number]{
   flex-direction: row;
 }
 
+.title-total .entradas-total {
+  justify-content: center;
+}
+.title-total .data-total {
+  margin: 0 25px;
+  justify-content: center;
+}
+.title-total .despesas-total {
+  justify-content: center;
+}
+.title-total .total-total {
+  justify-content: center;
+}
+
+.body-despesa .row-title-total{
+  border-bottom: 1px solid #777;
+}
+
 .data-total {
   text-align: center;
   flex: 1;
 }
 
 .entradas-total {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 30px;
   text-align: center;
   flex: 2;
 }
 
+.span-rs{
+  width: 30px;
+}
+
+
 .despesas-total {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 30px;
   text-align: center;
   flex: 2;
 }
 
 .total-total {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 30px;
   text-align: center;
   flex: 2;
 }

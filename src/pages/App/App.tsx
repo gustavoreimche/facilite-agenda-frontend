@@ -7,8 +7,6 @@ import { Container } from '../../Components/Container'
 import { ReqApi } from '../../ReqApi'
 import { useAppSelector } from '../../redux/hooks/useAppSelector';
 import AccountMenu from '../../Components/AccountMenu';
-import { click } from '@testing-library/user-event/dist/click';
-
 
 function App() {
 
@@ -277,6 +275,7 @@ function App() {
 
       dateaux.setDate(dateaux.getDate() - 1);
       setDate(dateaux);
+      setAgenda(array => [...array])
       preencherArrayRender();
       setEntradas(calculaEntradas())
       setTotal(calculaTotal())
@@ -287,6 +286,7 @@ function App() {
 
       dateaux.setDate(dateaux.getDate() + 1);
       setDate(dateaux);
+      setAgenda(array => [...array])
       preencherArrayRender();
       setEntradas(calculaEntradas())
       setTotal(calculaTotal())
@@ -322,7 +322,9 @@ function App() {
     };
 
     // typing on RIGHT hand side of =
+        
     onChangeNome = (e: React.FormEvent<HTMLInputElement>): void => {
+      console.log(e.currentTarget)
       this.setState({ nome: e.currentTarget.value });
     };
     onChangeValor = (e: React.FormEvent<HTMLInputElement>): void => {
@@ -409,9 +411,6 @@ function App() {
       }
     }
 
-
-
-
     render() {
 
       this.atulizaModal();
@@ -427,7 +426,7 @@ function App() {
           </div>
           <form action="" onSubmit={this.onClickAdd}>
             <label className='label' htmlFor='nome'>Nome: </label><br />
-            <input autoFocus id='nome' type="text" value={this.state.nome} required onChange={this.onChangeNome} />
+            <input autoFocus autoComplete='off' id='nome' type="text" value={this.state.nome} required onChange={this.onChangeNome} />
             <br /><br />
             <label className='label' htmlFor='servico'>Serivço</label><br />
             <input type="text" value={this.state.servico} onChange={this.onChangeServico} />

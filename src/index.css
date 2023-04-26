@@ -281,7 +281,6 @@ col.hora.hora{
   width: 50vw;
   height: 320px;
   border: none;
-  padding: 20px;
   color: white;
   border-radius: 20px;
   box-shadow: #494949;
@@ -291,12 +290,12 @@ col.hora.hora{
 input[type=text]{
   background-color: white;
   border: none;
-  width: 100%;
+  width: 99%;
 }
 
 input[type=number]{
   background-color: white;
-  width: 100%;
+  width: 99%;
   border: none;
 }
 

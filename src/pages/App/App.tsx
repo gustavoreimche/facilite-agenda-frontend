@@ -6,7 +6,42 @@ import 'react-calendar/dist/Calendar.css';
 import { Container } from '../../Components/Container'
 import { ReqApi } from '../../ReqApi'
 import { useAppSelector } from '../../redux/hooks/useAppSelector';
-import AccountMenu from '../../Components/AccountMenu';
+import Cabecalho from '../../Components/Cabecalho';
+
+interface Despesas {
+  _id?: string;
+  descricao: string;
+  valor: number;
+  day: number;
+  month: number;
+  year: number;
+  idUser?: string;
+}
+
+interface Agendamento {
+  _id?: string;
+  day: number;
+  month: number;
+  year: number;
+  hora: string;
+  nome: string;
+  servico: string;
+  valor: number;
+  formaPag?: string;
+  idUser: string
+}
+
+type State = {
+  nome: string;
+  valor: number;
+  servico: string;
+  hora: string
+};
+
+type StateDespesa = {
+  descricao: string;
+  valor: number;
+};
 
 function App() {
 
@@ -124,9 +159,6 @@ function App() {
       h: '20:00'
     },
   ]
-  const weekday = ["DOMINGO", "SEGUNDA", "TERÇA", "QUARTA", "QUINTA", "SEXTA", "SÁBADO"];
-  const month = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
-
 
   //df817e
   const [hardColor, setHardColor] = useState('#444')
@@ -149,7 +181,6 @@ function App() {
 
   const getAgendamentos = async () => {
     let data = await ReqApi.getAllAgendamentos(idUser)
-    console.log(data)
     setAgenda(data)
     setPix(calculaPix(data))
     setCard(calculaCard(data))
@@ -166,19 +197,6 @@ function App() {
     setCard(calculaCard(data))
     setMoney(calculaMoney(data))
   }
-
-
-  interface Despesas {
-    _id?: string;
-    descricao: string;
-    valor: number;
-    day: number;
-    month: number;
-    year: number;
-    idUser?: string;
-  }
-
-
 
   function verificaData(obj: any) {
 
@@ -255,76 +273,27 @@ function App() {
     return valor
   }
 
-
-  type State = {
-    nome: string;
-    valor: number;
-    servico: string;
-  };
-
-  type StateDespesa = {
-    descricao: string;
-    valor: number;
-  };
-
-
-  let dateaux = date;
-  class Cabecalho extends React.Component {
-
-    minusDay = () => {
-
-      dateaux.setDate(dateaux.getDate() - 1);
-      setDate(dateaux);
-      setAgenda(array => [...array])
-      preencherArrayRender();
-      setEntradas(calculaEntradas())
-      setTotal(calculaTotal())
-
-    }
-
-    addDay = () => {
-
-      dateaux.setDate(dateaux.getDate() + 1);
-      setDate(dateaux);
-      setAgenda(array => [...array])
-      preencherArrayRender();
-      setEntradas(calculaEntradas())
-      setTotal(calculaTotal())
-
-    }
-
-    render() {
-
-      return (
-        <div className="title">
-          <div className="mes-semana">
-            <h2 className="month">{month[date.getMonth()]}</h2>
-            <h4 className="week">{weekday[date.getDay()]}</h4>
-          </div>
-          <div className="dias">
-            <svg onClick={this.minusDay} viewBox="0 0 1024 1024" className="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" fill={hardColor}><g id="SVGRepo_bgCarrier" ></g><g id="SVGRepo_tracerCarrier" ></g><g id="SVGRepo_iconCarrier"><path d="M659.2 917.333333l66.133333-66.133333L386.133333 512 725.333333 172.8 659.2 106.666667 256 512z" fill={hardColor}></path></g></svg>
-            <h1 onClick={abrirModal2} className="day">{date.getDate()}</h1>
-            <svg onClick={this.addDay} viewBox="0 0 1024 1024" className="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" fill={hardColor}><g id="SVGRepo_bgCarrier" ></g><g id="SVGRepo_tracerCarrier" ></g><g id="SVGRepo_iconCarrier"><path d="M364.8 106.666667L298.666667 172.8 637.866667 512 298.666667 851.2l66.133333 66.133333L768 512z" fill={hardColor}></path></g></svg>
-          </div>
-          <div className="menu">
-            <AccountMenu hardColor={hardColor} />
-          </div>
-        </div>
-      )
-    }
+  const atualiza = (dateAux: Date) => {
+    setDate(dateAux);
+    setAgenda(array => [...array])
+    preencherArrayRender();
+    setEntradas(calculaEntradas())
+    setTotal(calculaTotal())
   }
+
+
   class FormCadastro extends React.Component {
 
     state: State = {
       nome: '',
       valor: 0,
       servico: '',
+      hora: ''
     };
 
     // typing on RIGHT hand side of =
-        
+
     onChangeNome = (e: React.FormEvent<HTMLInputElement>): void => {
-      console.log(e.currentTarget)
       this.setState({ nome: e.currentTarget.value });
     };
     onChangeValor = (e: React.FormEvent<HTMLInputElement>): void => {
@@ -336,12 +305,17 @@ function App() {
 
     // atualizar formulario com os valores do agendaemento selecionado
 
+
     public atulizaModal() {
+      
       let index = agendamentosRender.findIndex(agendamento => agendamento._id === ID)
       if (index != -1) {
         if (agendamentosRender[index].nome != '') {
           this.state.nome = agendamentosRender[index].nome
           this.state.servico = agendamentosRender[index].servico
+          this.state.hora = agendamentosRender[index].hora
+        } else {
+          this.state.hora = agendamentosRender[index].hora
         }
       }
     }
@@ -380,7 +354,6 @@ function App() {
         temp.push(newAgendamento)
       }
       setAgenda(temp)
-      console.log(agenda)
       preencherArrayRender();
       setEntradas(calculaEntradas())
       setTotal(calculaTotal())
@@ -395,19 +368,30 @@ function App() {
         alert('Não há o que excluir!')
         fecharModal();
       } else {
+        let r = confirm('Deseja realmente excluir o agendamento selecionado?')
+        if(r){
+          ReqApi.deleteAgendamento(ID)
 
-        ReqApi.deleteAgendamento(ID)
+          let temp = (agenda.filter(item => item._id !== agendamentosRender[index]._id))
+          setAgenda(agenda.filter(item => item._id !== agendamentosRender[index]._id))
+  
+          setPix(calculaPix(temp))
+          setCard(calculaCard(temp))
+          setMoney(calculaMoney(temp))
+          setEntradas(calculaEntradas())
+          setTotal(calculaTotal())
+          setDate(date)
+          fecharModal()
+        } 
+      }
+    }
 
-        let temp = (agenda.filter(item => item._id !== agendamentosRender[index]._id))
-        setAgenda(agenda.filter(item => item._id !== agendamentosRender[index]._id))
-
-        setPix(calculaPix(temp))
-        setCard(calculaCard(temp))
-        setMoney(calculaMoney(temp))
-        setEntradas(calculaEntradas())
-        setTotal(calculaTotal())
-        setDate(date)
-        fecharModal()
+    verificaHora = () => {
+      let agendamento = agenda.find(item => item._id === ID)
+      if(agendamento) {
+        return agendamento.hora
+      } else {
+        return ''
       }
     }
 
@@ -418,9 +402,9 @@ function App() {
       return (
         <div className='modal-area'>
           <div className='row-titulo'>
-            <div className='grow1'>   </div>
-            <div className="titulo grow1">AGENDAMENTO</div>
-            <div className="close grow1">
+            <div className='close'>   </div>
+            <div className="titulo ">{`AGENDAMENTO - ${this.state.hora}`}</div>
+            <div className="close ">
               <svg onClick={fecharModal} className='svg-close' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" ></g><g id="SVGRepo_tracerCarrier" ></g><g id="SVGRepo_iconCarrier"> <g id="Menu / Close_MD"> <path id="Vector" d="M18 18L12 12M12 12L6 6M12 12L18 6M12 12L6 18" stroke="#ffffff" ></path> </g> </g></svg>
             </div>
           </div>
@@ -444,7 +428,7 @@ function App() {
     }
   }
 
-  class FormuDespesa extends React.Component {
+  class FormDespesa extends React.Component {
 
     state: StateDespesa = {
       descricao: '',
@@ -453,7 +437,6 @@ function App() {
 
     onChangeDescricao = (e: React.FormEvent<HTMLInputElement>): void => {
       this.setState({ descricao: e.currentTarget.value });
-      console.log(this.state.descricao)
     };
     onChangeValor = (e: React.FormEvent<HTMLInputElement>): void => {
       this.setState({ valor: +(e.currentTarget.value) });
@@ -474,7 +457,6 @@ function App() {
       temp.push(despesa)
 
       setDespesas(temp)
-      console.log(despesas)
       setEntradas(calculaEntradas())
       setTotal(calculaTotal())
       fecharModalDespesa();
@@ -513,7 +495,7 @@ function App() {
     setID(event.currentTarget.id);
     setIsOpen(true);
   }
-  function abrirModal2() {
+  function abrirModalCalendar() {
     setIsOpen2(true);
   }
   function abrirModalDespesa() {
@@ -541,18 +523,7 @@ function App() {
     setIsOpenTotal(false)
   }
 
-  interface Agendamento {
-    _id?: string;
-    day: number;
-    month: number;
-    year: number;
-    hora: string;
-    nome: string;
-    servico: string;
-    valor: number;
-    formaPag?: string;
-    idUser: string
-  }
+  
 
   let agendamentosRender = new Array;
 
@@ -622,7 +593,6 @@ function App() {
   preencherArrayRender();
 
   function onClickDay(clickedDay: Date) {
-    console.log(clickedDay)
     setDate(clickedDay);
     setValue(clickedDay)
     preencherArrayRender();
@@ -636,11 +606,14 @@ function App() {
     let tempDespesas = [...despesas]
     let index = +event.currentTarget.id
 
-    ReqApi.deleteDespesa(event.currentTarget.id)
-    tempDespesas.splice(index, 1)
-    setDespesas(tempDespesas)
-    setDespesasTotal(calculaDespesaTotal(tempDespesas))
-    alert('Excluido com sucesso!')
+    let r = confirm('Deseja realmente excluir a despesa selecionada?')
+    if(r) {
+      ReqApi.deleteDespesa(event.currentTarget.id)
+      tempDespesas.splice(index, 1)
+      setDespesas(tempDespesas)
+      setDespesasTotal(calculaDespesaTotal(tempDespesas))
+    }
+    
   }
 
   function checkedPix(event: React.ChangeEvent<HTMLElement>) {
@@ -732,7 +705,7 @@ function App() {
     <>
       <Container hardColor={hardColor} weakColor={weakColor}>
         <div>
-          <Cabecalho />
+          <Cabecalho abrirModal={abrirModalCalendar} date={date} hardColor={hardColor} atualiza={atualiza} />
 
           <Modal
             style={{
@@ -786,7 +759,7 @@ function App() {
             overlayClassName="modal-overlay"
             closeTimeoutMS={200}
           >
-            <FormuDespesa />
+            <FormDespesa />
           </Modal>
 
           <Modal

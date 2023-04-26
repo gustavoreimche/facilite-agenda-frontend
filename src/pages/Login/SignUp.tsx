@@ -101,7 +101,7 @@ export default function SignUp() {
           }}
         >
           <div>
-            <img style={{ width: "200px" }} src="../../../public/LOGO.png" alt="logo" />
+            <img style={{ width: "200px" }} src="/LOGO.png" alt="logo" />
           </div>
           <br /><br />
           <Typography component="h1" variant="h5">

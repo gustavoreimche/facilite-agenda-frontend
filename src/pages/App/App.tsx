@@ -307,7 +307,7 @@ function App() {
 
 
     public atulizaModal() {
-      
+
       let index = agendamentosRender.findIndex(agendamento => agendamento._id === ID)
       if (index != -1) {
         if (agendamentosRender[index].nome != '') {
@@ -340,18 +340,42 @@ function App() {
       let temp = [...agenda]
 
       if (selectedAgendamento) {
-        temp.splice(idLocal, 1)
+        if (this.state.valor === 0) {
+          if (confirm('Deseja realmente prosseguir sem valor?')) {
+            temp.splice(idLocal, 1)
 
-        selectedAgendamento.valor = this.state.valor
-        ReqApi.updateAgendamento(selectedAgendamento)
-        temp.push(selectedAgendamento)
+            selectedAgendamento.valor = this.state.valor
+            ReqApi.updateAgendamento(selectedAgendamento)
+            temp.push(selectedAgendamento)
+          } else {
 
+          }
+        } else {
+          temp.splice(idLocal, 1)
+
+          selectedAgendamento.valor = this.state.valor
+          ReqApi.updateAgendamento(selectedAgendamento)
+          temp.push(selectedAgendamento)
+        }
+        
       } else {
-        let response = ReqApi.createAgendamento(newAgendamento)
-        response.then(response => {
-          newAgendamento._id = response._id
-        })
-        temp.push(newAgendamento)
+        if (this.state.valor === 0) {
+          if (confirm('Deseja realmente prosseguir sem valor?')) {
+            let response = ReqApi.createAgendamento(newAgendamento)
+            response.then(response => {
+              newAgendamento._id = response._id
+            })
+            temp.push(newAgendamento)
+          } else {
+
+          }
+        } else {
+          let response = ReqApi.createAgendamento(newAgendamento)
+          response.then(response => {
+            newAgendamento._id = response._id
+          })
+          temp.push(newAgendamento)
+        }
       }
       setAgenda(temp)
       preencherArrayRender();
@@ -369,12 +393,12 @@ function App() {
         fecharModal();
       } else {
         let r = confirm('Deseja realmente excluir o agendamento selecionado?')
-        if(r){
+        if (r) {
           ReqApi.deleteAgendamento(ID)
 
           let temp = (agenda.filter(item => item._id !== agendamentosRender[index]._id))
           setAgenda(agenda.filter(item => item._id !== agendamentosRender[index]._id))
-  
+
           setPix(calculaPix(temp))
           setCard(calculaCard(temp))
           setMoney(calculaMoney(temp))
@@ -382,13 +406,13 @@ function App() {
           setTotal(calculaTotal())
           setDate(date)
           fecharModal()
-        } 
+        }
       }
     }
 
     verificaHora = () => {
       let agendamento = agenda.find(item => item._id === ID)
-      if(agendamento) {
+      if (agendamento) {
         return agendamento.hora
       } else {
         return ''
@@ -523,7 +547,7 @@ function App() {
     setIsOpenTotal(false)
   }
 
-  
+
 
   let agendamentosRender = new Array;
 
@@ -607,13 +631,13 @@ function App() {
     let index = +event.currentTarget.id
 
     let r = confirm('Deseja realmente excluir a despesa selecionada?')
-    if(r) {
+    if (r) {
       ReqApi.deleteDespesa(event.currentTarget.id)
       tempDespesas.splice(index, 1)
       setDespesas(tempDespesas)
       setDespesasTotal(calculaDespesaTotal(tempDespesas))
     }
-    
+
   }
 
   function checkedPix(event: React.ChangeEvent<HTMLElement>) {

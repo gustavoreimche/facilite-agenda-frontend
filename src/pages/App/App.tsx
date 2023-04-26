@@ -357,7 +357,7 @@ function App() {
           ReqApi.updateAgendamento(selectedAgendamento)
           temp.push(selectedAgendamento)
         }
-        
+
       } else {
         if (this.state.valor === 0) {
           if (confirm('Deseja realmente prosseguir sem valor?')) {
@@ -406,6 +406,8 @@ function App() {
           setTotal(calculaTotal())
           setDate(date)
           fecharModal()
+        } else {
+          setIsOpen(false)
         }
       }
     }

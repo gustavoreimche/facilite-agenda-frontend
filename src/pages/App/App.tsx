@@ -131,7 +131,7 @@ function App() {
 
 
   //df817e
-  const [hardColor, setHardColor] = useState('#df817e')
+  const [hardColor, setHardColor] = useState('#444')
   const [weakColor, setWeakColor] = useState('#999')
   const [value, setValue] = useState(new Date());
   const [date, setDate] = useState(new Date());

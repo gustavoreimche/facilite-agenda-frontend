@@ -281,7 +281,6 @@ function App() {
     setTotal(calculaTotal())
   }
 
-
   class FormCadastro extends React.Component {
 
     state: State = {

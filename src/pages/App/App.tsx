@@ -167,12 +167,9 @@ function App() {
   const [date, setDate] = useState(new Date());
   const [ID, setID] = useState('0');
   const [idUser] = useState(useAppSelector(state => state.user._id))
-  const [despesasTotal, setDespesasTotal] = useState(calculaDespesaTotal(despesas));
-  const [entradas, setEntradas] = useState(calculaEntradas());
   const [pix, setPix] = useState(calculaPix(agenda))
   const [card, setCard] = useState(calculaCard(agenda))
   const [money, setMoney] = useState(calculaMoney(agenda))
-  const [total, setTotal] = useState(calculaTotal());
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const [modalIsOpen2, setIsOpen2] = React.useState(false);
   const [modalIsOpenDespesa, setIsOpenDespesa] = React.useState(false);
@@ -201,43 +198,6 @@ function App() {
   function verificaData(obj: any) {
 
     return obj.day === date.getDate() && obj.month === date.getMonth() && obj.year === date.getFullYear()
-  }
-
-  function calculaDespesaTotal(temp: Despesas[]) {
-    let valor: number = 0;
-    temp.map(despesa => {
-      if (verificaData(despesa)) {
-        valor += despesa.valor
-      }
-    })
-    return valor;
-  }
-
-  function calculaEntradas() {
-    let valor: number = 0;
-    agenda.map(agendamento => {
-      if (verificaData(agendamento) && agendamento.formaPag !== 'none') {
-        valor += agendamento.valor
-      }
-    })
-    return valor;
-  }
-
-  function calculaTotal() {
-    let entradas: number = 0;
-    let despesasLocal: number = 0;
-    agenda.map(agendamento => {
-      if (verificaData(agendamento) && agendamento.formaPag !== 'none') {
-        entradas += agendamento.valor
-      }
-    })
-
-    despesas.map(despesa => {
-      if (verificaData(despesa)) {
-        despesasLocal += despesa.valor
-      }
-    })
-    return entradas - despesasLocal;
   }
 
   function calculaPix(agendaArray: Array<Agendamento>) {
@@ -277,8 +237,9 @@ function App() {
     setDate(dateAux);
     setAgenda(array => [...array])
     preencherArrayRender();
-    setEntradas(calculaEntradas())
-    setTotal(calculaTotal())
+    setMoney(calculaMoney(agenda))
+    setPix(calculaPix(agenda))
+    setCard(calculaCard(agenda))
   }
 
   class FormCadastro extends React.Component {
@@ -378,8 +339,6 @@ function App() {
       }
       setAgenda(temp)
       preencherArrayRender();
-      setEntradas(calculaEntradas())
-      setTotal(calculaTotal())
       fecharModal();
     };
 
@@ -401,8 +360,6 @@ function App() {
           setPix(calculaPix(temp))
           setCard(calculaCard(temp))
           setMoney(calculaMoney(temp))
-          setEntradas(calculaEntradas())
-          setTotal(calculaTotal())
           setDate(date)
           fecharModal()
         } else {
@@ -482,8 +439,6 @@ function App() {
       temp.push(despesa)
 
       setDespesas(temp)
-      setEntradas(calculaEntradas())
-      setTotal(calculaTotal())
       fecharModalDespesa();
     };
 
@@ -565,13 +520,10 @@ function App() {
   useEffect(() => {
     setValue(value)
     setDate(value)
-    setDespesasTotal(calculaDespesaTotal(despesas))
-    setEntradas(calculaEntradas())
-    setTotal(calculaTotal())
     setMoney(calculaMoney(agenda))
     setPix(calculaPix(agenda))
     setCard(calculaCard(agenda))
-  }, [value, date, despesasTotal, total, pix, card, money, entradas])
+  }, [value, date, pix, card, money])
 
   function atualizaAgendamentosDay() {
     agendamentosDay = [];
@@ -622,8 +574,6 @@ function App() {
     setValue(clickedDay)
     preencherArrayRender();
     setAgenda(array => [...array])
-    setEntradas(calculaEntradas())
-    setTotal(calculaTotal())
     fecharModal2();
   }
 
@@ -636,7 +586,6 @@ function App() {
       ReqApi.deleteDespesa(event.currentTarget.id)
       tempDespesas.splice(index, 1)
       setDespesas(tempDespesas)
-      setDespesasTotal(calculaDespesaTotal(tempDespesas))
     }
 
   }
@@ -1058,7 +1007,7 @@ function App() {
                 ENTRADAS:
               </label>
               <div className="valor-entradas">
-                {`R$ ${entradas.toFixed(2)}`}
+                {`R$ ${reduceAgendaDay(date.getDate()).toFixed(2)}`}
               </div>
             </div>
             <div className="despesas">
@@ -1066,7 +1015,7 @@ function App() {
                 TOTAL DIA:
               </label>
               <div className="despesas-valor" onClick={abrirModalDespesa}>
-                {`R$ ${total.toFixed(2)}`}
+                {`R$ ${(reduceAgendaDay(date.getDate()) - reduceDespesaDay(date.getDate())).toFixed(2)}`}
               </div>
             </div>
             <div className="despesas">

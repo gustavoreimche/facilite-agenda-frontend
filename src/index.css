@@ -344,6 +344,7 @@ input[type=number]{
   color: black;
   border-radius: 0 0 15px 15px;
   padding: 0px 10px;
+  padding-bottom: 10px;
 }
 
 .row-title{

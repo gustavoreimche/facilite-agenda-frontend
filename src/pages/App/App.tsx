@@ -715,14 +715,32 @@ function App() {
     return days;
   }
 
-  function reduceAgenda(day: number) {
-    return agenda.reduce((acumulator, currentValue) => {
+  function reduceAgendaDay(day: number) {
+    let totalEntradas: number = 0
+
+    let totalAgenda = agenda.reduce((acumulator, currentValue) => {
       return (currentValue.day == day && currentValue.month == date.getMonth() && currentValue.formaPag !== 'none') ? acumulator + currentValue.valor : acumulator
     }, 0)
+
+    return totalEntradas + totalAgenda 
   }
-  function reduceDespesa(day: number) {
+  function reduceDespesaDay(day: number) {
     return despesas.reduce((acumulator, currentValue) => {
       return (currentValue.day == day && currentValue.month == date.getMonth()) ? acumulator + currentValue.valor : acumulator
+    }, 0)
+  }
+  function reduceAgendaMonth(month: number) {
+    let totalEntradas: number = 0
+
+    let totalAgenda = agenda.reduce((acumulator, currentValue) => {
+      return (currentValue.month == month && currentValue.formaPag !== 'none') ? acumulator + currentValue.valor : acumulator
+    }, 0)
+
+    return totalEntradas + totalAgenda 
+  }
+  function reduceDespesaMonth(month: number) {
+    return despesas.reduce((acumulator, currentValue) => {
+      return (currentValue.month == month) ? acumulator + currentValue.valor : acumulator
     }, 0)
   }
 
@@ -731,7 +749,15 @@ function App() {
     <>
       <Container hardColor={hardColor} weakColor={weakColor}>
         <div>
-          <Cabecalho abrirModal={abrirModalCalendar} date={date} hardColor={hardColor} atualiza={atualiza} />
+          <Cabecalho
+            abrirModal={abrirModalCalendar}
+            date={date}
+            hardColor={hardColor}
+            atualiza={atualiza}
+            openModalTotal={abrirModalTotal}
+            // openModalEntradas={}
+            openModalDespesa={abrirModalDespesa}
+          />
 
           <Modal
             style={{
@@ -889,22 +915,42 @@ function App() {
                       </div>
                       <div className="entradas-total">
                         {
-                          reduceAgenda(el) === 0 ? "" : <><span className='span-rs'>R$ </span><span className='span-valor'>{reduceAgenda(el).toFixed(2)}</span></>
+                          reduceAgendaDay(el) === 0 ? "" : <><span className='span-rs'>R$ </span><span className='span-valor'>{reduceAgendaDay(el).toFixed(2)}</span></>
                         }
                       </div>
                       <div className="despesas-total">
                         {
-                          reduceDespesa(el) === 0 ? "" : <><span className='span-rs'>R$ </span><span className='span-valor'>{reduceDespesa(el).toFixed(2)}</span></>
+                          reduceDespesaDay(el) === 0 ? "" : <><span className='span-rs'>R$ </span><span className='span-valor'>{reduceDespesaDay(el).toFixed(2)}</span></>
                         }
                       </div>
                       <div className="total-total">
                         {
-                          (reduceAgenda(el) - reduceDespesa(el)) === 0 ? '' : <><span className='span-rs'>R$ </span><span className='span-valor'>{(reduceAgenda(el) - reduceDespesa(el)).toFixed(2)}</span></>
+                          (reduceAgendaDay(el) - reduceDespesaDay(el)) === 0 ? '' : <><span className='span-rs'>R$ </span><span className='span-valor'>{(reduceAgendaDay(el) - reduceDespesaDay(el)).toFixed(2)}</span></>
                         }
                       </div>
                     </div>
                   ))
                 }
+                <div style={{ backgroundColor: weakColor ,fontWeight: '700', marginTop: '10px', borderRadius: '10px', padding: '2px 0px'}} className="row-title-total" >
+                  <div className="data-total">
+                    TOTAL
+                  </div>
+                  <div className="entradas-total">
+                    {
+                      reduceAgendaMonth(date.getMonth()) === 0 ? "" : <><span className='span-rs'>R$ </span><span className='span-valor'>{reduceAgendaMonth(date.getMonth()).toFixed(2)}</span></>
+                    }
+                  </div>
+                  <div className="despesas-total">
+                    {
+                      reduceDespesaMonth(date.getMonth()) === 0 ? "" : <><span className='span-rs'>R$ </span><span className='span-valor'>{reduceDespesaMonth(date.getMonth()).toFixed(2)}</span></>
+                    }
+                  </div>
+                  <div className="total-total">
+                    {
+                      (reduceAgendaMonth(date.getMonth()) - reduceDespesaMonth(date.getMonth())) === 0 ? '' : <><span className='span-rs'>R$ </span><span className='span-valor'>{(reduceAgendaMonth(date.getMonth()) - reduceDespesaMonth(date.getMonth())).toFixed(2)}</span></>
+                    }
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1018,18 +1064,18 @@ function App() {
             </div>
             <div className="despesas">
               <label className="despesas-label" onClick={abrirModalDespesas}>
-                DESPESAS:
+                TOTAL DIA:
               </label>
               <div className="despesas-valor" onClick={abrirModalDespesa}>
-                {`R$ ${despesasTotal.toFixed(2)}`}
+                {`R$ ${total.toFixed(2)}`}
               </div>
             </div>
             <div className="despesas">
               <label htmlFor="" className="total-label" onClick={abrirModalTotal}>
-                TOTAL:
+                TOTAL MÊS:
               </label>
               <div className="despesas-valor">
-                {`R$ ${total.toFixed(2)}`}
+                {`R$ ${(reduceAgendaMonth(date.getMonth()) - reduceDespesaMonth(date.getMonth())).toFixed(2)}`}
               </div>
             </div>
 

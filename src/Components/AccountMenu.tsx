@@ -6,6 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import Tooltip from '@mui/material/Tooltip';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
@@ -16,8 +17,11 @@ import { useNavigate } from 'react-router-dom';
 
 type Props = {
     hardColor: string
+    openModalDespesa: () => void;
+    openModalTotal: () => void;
+    openModalEntradas?: () => void;
 }
-export default function AccountMenu({ hardColor }: Props) {
+export default function AccountMenu({ hardColor, openModalDespesa, openModalEntradas, openModalTotal }: Props) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -38,7 +42,7 @@ export default function AccountMenu({ hardColor }: Props) {
 
     return (
         <React.Fragment>
-            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center'}}>
                 <Tooltip title="Account settings">
                     <IconButton
                         onClick={handleClick}
@@ -88,18 +92,50 @@ export default function AccountMenu({ hardColor }: Props) {
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 <MenuItem onClick={handleClose}>
-                    <Avatar /> {name}
+                    <Avatar sx={{ color: hardColor}}/> {name}
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={openModalEntradas}>
+                    <ListItemIcon>
+                        <AttachMoneyIcon fontSize='small' sx={{ color: hardColor}}/>
+                    </ListItemIcon>
+                    Entradas
+                </MenuItem>
+                <MenuItem onClick={openModalEntradas}>
+                    <ListItemIcon>
+                        <AttachMoneyIcon fontSize='small' sx={{ color: hardColor}} />
+                    </ListItemIcon>
+                    Listar Entradas
+                </MenuItem>
+                <MenuItem onClick={openModalDespesa}>
+                    <ListItemIcon>
+                        <AttachMoneyIcon fontSize='small' sx={{ color: hardColor}} />
+                    </ListItemIcon>
+                    Despesas
+                </MenuItem>
+                <MenuItem onClick={openModalDespesa}>
+                    <ListItemIcon>
+                        <AttachMoneyIcon fontSize='small' sx={{ color: hardColor}} />
+                    </ListItemIcon>
+                    Listar Despesas
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={openModalTotal}>
+                    <ListItemIcon>
+                        <AttachMoneyIcon fontSize='small' sx={{ color: hardColor}} />
+                    </ListItemIcon>
+                    Relatório Mensal
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleClose}>
                     <ListItemIcon>
-                        <Settings fontSize="small" />
+                        <Settings fontSize="small" sx={{ color: hardColor}}/>
                     </ListItemIcon>
                     Settings
                 </MenuItem>
                 <MenuItem onClick={logout}>
                     <ListItemIcon>
-                        <Logout fontSize="small" />
+                        <Logout fontSize="small" sx={{ color: hardColor}}/>
                     </ListItemIcon>
                     Logout
                 </MenuItem>

@@ -6,9 +6,7 @@ type Props = {
 
 export const RequireAuth = ({ children }: Props) => {
 
-    const auth = useAppSelector(state => state.auth)
-
-    const isAuth = auth.isAuth;
+    const isAuth = useAppSelector(state => state.auth.isAuth)
 
     if (isAuth) {
         return children;

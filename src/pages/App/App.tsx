@@ -17,6 +17,15 @@ interface Despesas {
   year: number;
   idUser?: string;
 }
+interface Entradas {
+  _id?: string;
+  descricao: string;
+  valor: number;
+  day: number;
+  month: number;
+  year: number;
+  idUser?: string;
+}
 
 interface Agendamento {
   _id?: string;
@@ -47,6 +56,7 @@ function App() {
 
   const [agenda, setAgenda] = useState<Agendamento[]>([]);
   const [despesas, setDespesas] = useState<Despesas[]>([]);
+  const [entradas, setEntradas] = useState<Despesas[]>([]);
 
   const horarios = [
     {
@@ -173,6 +183,8 @@ function App() {
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const [modalIsOpen2, setIsOpen2] = React.useState(false);
   const [modalIsOpenDespesa, setIsOpenDespesa] = React.useState(false);
+  const [modalIsOpenEntrada, setIsOpenEntrada] = React.useState(false);
+  const [modalIsOpenEntradas, setIsOpenEntradas] = React.useState(false);
   const [modalIsOpenDespesas, setIsOpenDespesas] = React.useState(false);
   const [modalIsOpenTotal, setIsOpenTotal] = React.useState(false);
 
@@ -184,19 +196,17 @@ function App() {
     setMoney(calculaMoney(data))
   }
 
+  const getEntradas = async () => {
+    let data = await ReqApi.getAllEntradas(idUser)
+    setEntradas(data)
+  }
+
   const getDespesas = async () => {
     let data = await ReqApi.getAllDespesas(idUser)
-    data.map((result: { date: Date }) => {
-      result.date = new Date(result.date)
-    })
     setDespesas(data)
-    setPix(calculaPix(data))
-    setCard(calculaCard(data))
-    setMoney(calculaMoney(data))
   }
 
   function verificaData(obj: any) {
-
     return obj.day === date.getDate() && obj.month === date.getMonth() && obj.year === date.getFullYear()
   }
 
@@ -301,14 +311,13 @@ function App() {
 
       if (selectedAgendamento) {
         if (this.state.valor === 0) {
-          if (confirm('Deseja realmente prosseguir sem valor?')) {
+          let r = confirm('Deseja realmente prosseguir sem valor?')
+          if (r) {
             temp.splice(idLocal, 1)
 
             selectedAgendamento.valor = this.state.valor
             ReqApi.updateAgendamento(selectedAgendamento)
             temp.push(selectedAgendamento)
-          } else {
-
           }
         } else {
           temp.splice(idLocal, 1)
@@ -320,14 +329,13 @@ function App() {
 
       } else {
         if (this.state.valor === 0) {
-          if (confirm('Deseja realmente prosseguir sem valor?')) {
+          let r = confirm('Deseja realmente prosseguir sem valor?')
+          if (r) {
             let response = ReqApi.createAgendamento(newAgendamento)
             response.then(response => {
               newAgendamento._id = response._id
             })
             temp.push(newAgendamento)
-          } else {
-
           }
         } else {
           let response = ReqApi.createAgendamento(newAgendamento)
@@ -468,6 +476,64 @@ function App() {
       );
     }
   }
+  class FormEntrada extends React.Component {
+
+    state: StateDespesa = {
+      descricao: '',
+      valor: 0,
+    };
+
+    onChangeDescricao = (e: React.FormEvent<HTMLInputElement>): void => {
+      this.setState({ descricao: e.currentTarget.value });
+    };
+    onChangeValor = (e: React.FormEvent<HTMLInputElement>): void => {
+      this.setState({ valor: +(e.currentTarget.value) });
+    };
+
+    private onClickAdd = () => {
+      let temp = entradas
+      let entrada: Entradas = {
+        day: date.getDate(),
+        month: date.getMonth(),
+        year: date.getFullYear(),
+        descricao: this.state.descricao,
+        valor: this.state.valor,
+        idUser
+      }
+
+      ReqApi.createEntrada(entrada).then(response => entrada._id = response._id)
+      temp.push(entrada)
+
+      setEntradas(temp)
+      fecharModalEntrada();
+    };
+
+    render() {
+      return (
+        <div className='modal-area'>
+          <div className='row-titulo'>
+            <div className='grow1'>   </div>
+            <div className="titulo grow1">ENTRADA</div>
+            <div className="close grow1">
+              <svg onClick={fecharModalEntrada} className='svg-close' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" ></g><g id="SVGRepo_tracerCarrier" ></g><g id="SVGRepo_iconCarrier"> <g id="Menu / Close_MD"> <path id="Vector" d="M18 18L12 12M12 12L6 6M12 12L18 6M12 12L6 18" stroke="#ffffff" ></path> </g> </g></svg>
+            </div>
+          </div>
+          <form action="" onSubmit={this.onClickAdd}>
+            <label className='label' htmlFor='descricao'>Descrição: </label><br />
+            <input id='descricao' type="text" value={this.state.descricao} required onChange={this.onChangeDescricao} />
+            <br /><br />
+            <label className='label' htmlFor='valor'>Valor: </label>
+            <input type="number" value={this.state.valor === 0 ? '' : (this.state.valor)} onChange={this.onChangeValor} />
+            <br /><br />
+            <div className="div-cadastrar-button">
+              <input className='cadastrar-button' type="submit" value="CADASTRAR" />
+              <div></div>
+            </div>
+          </form>
+        </div>
+      );
+    }
+  }
 
 
 
@@ -481,8 +547,14 @@ function App() {
   function abrirModalDespesa() {
     setIsOpenDespesa(true);
   }
+  function abrirModalEntrada() {
+    setIsOpenEntrada(true);
+  }
   function abrirModalDespesas() {
     setIsOpenDespesas(true)
+  }
+  function abrirModalEntradas() {
+    setIsOpenEntradas(true)
   }
   function abrirModalTotal() {
     setIsOpenTotal(true)
@@ -499,6 +571,12 @@ function App() {
   function fecharModalDespesas() {
     setIsOpenDespesas(false)
   }
+  function fecharModalEntradas() {
+    setIsOpenEntradas(false)
+  }
+  function fecharModalEntrada() {
+    setIsOpenEntrada(false)
+  }
   function fecharModalTotal() {
     setIsOpenTotal(false)
   }
@@ -512,6 +590,7 @@ function App() {
   useEffect(() => {
     getAgendamentos();
     getDespesas();
+    getEntradas();
     setMoney(calculaMoney(agenda))
     setPix(calculaPix(agenda))
     setCard(calculaCard(agenda))
@@ -587,7 +666,18 @@ function App() {
       tempDespesas.splice(index, 1)
       setDespesas(tempDespesas)
     }
+  }
 
+  function excluirEntrada(event: React.MouseEvent<HTMLButtonElement>) {
+    let tempEntradas = [...entradas]
+    let index = +event.currentTarget.id
+
+    let r = confirm('Deseja realmente excluir a entrada selecionada?')
+    if (r) {
+      ReqApi.deleteEntrada(event.currentTarget.id)
+      tempEntradas.splice(index, 1)
+      setEntradas(tempEntradas)
+    }
   }
 
   function checkedPix(event: React.ChangeEvent<HTMLElement>) {
@@ -664,13 +754,15 @@ function App() {
   }
 
   function reduceAgendaDay(day: number) {
-    let totalEntradas: number = 0
+    let totalEntradas = entradas.reduce((acumulator, currentValue) => {
+      return (currentValue.day == day && currentValue.month == date.getMonth()) ? acumulator + currentValue.valor : acumulator
+    }, 0)
 
     let totalAgenda = agenda.reduce((acumulator, currentValue) => {
       return (currentValue.day == day && currentValue.month == date.getMonth() && currentValue.formaPag !== 'none') ? acumulator + currentValue.valor : acumulator
     }, 0)
 
-    return totalEntradas + totalAgenda 
+    return totalEntradas + totalAgenda
   }
   function reduceDespesaDay(day: number) {
     return despesas.reduce((acumulator, currentValue) => {
@@ -678,13 +770,15 @@ function App() {
     }, 0)
   }
   function reduceAgendaMonth(month: number) {
-    let totalEntradas: number = 0
+    let totalEntradas = entradas.reduce((acumulator, currentValue) => {
+      return (currentValue.month == month) ? acumulator + currentValue.valor : acumulator
+    }, 0)
 
     let totalAgenda = agenda.reduce((acumulator, currentValue) => {
       return (currentValue.month == month && currentValue.formaPag !== 'none') ? acumulator + currentValue.valor : acumulator
     }, 0)
 
-    return totalEntradas + totalAgenda 
+    return totalEntradas + totalAgenda
   }
   function reduceDespesaMonth(month: number) {
     return despesas.reduce((acumulator, currentValue) => {
@@ -703,8 +797,10 @@ function App() {
             hardColor={hardColor}
             atualiza={atualiza}
             openModalTotal={abrirModalTotal}
-            // openModalEntradas={}
+            openModalEntrada={abrirModalEntrada}
             openModalDespesa={abrirModalDespesa}
+            openModalEntradas={abrirModalEntradas}
+            openModalDespesas={abrirModalDespesas}
           />
 
           <Modal
@@ -768,6 +864,24 @@ function App() {
                 backgroundColor: hardColor,
               }
             }}
+            isOpen={modalIsOpenEntrada}
+            appElement={document.getElementById('#root') || undefined}
+            onRequestClose={fecharModalEntrada}
+            ariaHideApp={false}
+            contentLabel="Modal de exemplo"
+            className="modal-despesa"
+            overlayClassName="modal-overlay"
+            closeTimeoutMS={200}
+          >
+            <FormEntrada />
+          </Modal>
+
+          <Modal
+            style={{
+              content: {
+                backgroundColor: hardColor,
+              }
+            }}
             isOpen={modalIsOpenDespesas}
             onRequestClose={fecharModalDespesas}
             appElement={document.getElementById('#root') || undefined}
@@ -778,6 +892,8 @@ function App() {
             closeTimeoutMS={200}
           >
             <div className="area-despesas">
+              <span style={{ fontSize: '20px' }}> DESPESAS </span>
+              <br /><br />
               <div className="row-title">
                 <div className="descricao-despesa">
                   DESCRIÇÃO
@@ -809,6 +925,67 @@ function App() {
                         </div>
                         <div className="excluir">
                           <button className='button-excluir-despesa' id={`${despesa._id}`} onClick={excluirDespesa}>
+                            <svg className="excluir" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" ></g><g id="SVGRepo_tracerCarrier" ></g><g id="SVGRepo_iconCarrier"><path d="M4.99997 8H6.5M6.5 8V18C6.5 19.1046 7.39543 20 8.5 20H15.5C16.6046 20 17.5 19.1046 17.5 18V8M6.5 8H17.5M17.5 8H19M9 5H15M9.99997 11.5V16.5M14 11.5V16.5" stroke="#b71010" ></path></g></svg>
+                          </button>
+                        </div>
+                      </div>
+                      : null
+                  )
+                  )
+                }
+              </div>
+            </div>
+          </Modal>
+
+          <Modal
+            style={{
+              content: {
+                backgroundColor: hardColor,
+              }
+            }}
+            isOpen={modalIsOpenEntradas}
+            onRequestClose={fecharModalEntradas}
+            appElement={document.getElementById('#root') || undefined}
+            ariaHideApp={false}
+            contentLabel="Modal de exemplo"
+            className="modal-despesas"
+            overlayClassName="modal-overlay"
+            closeTimeoutMS={200}
+          >
+            <div className="area-despesas">
+              <span style={{ fontSize: '20px' }}> ENTRADAS </span>
+              <br /><br />
+              <div className="row-title">
+                <div className="descricao-despesa">
+                  DESCRIÇÃO
+                </div>
+                <div className="valor-despesa">
+                  VALOR
+                </div>
+                <div className="data-despesa">
+                  DATA
+                </div>
+                <div className="excluir">
+
+                </div>
+              </div>
+              <div className="body-despesa">
+
+                {
+                  entradas.map((entrada, index) => (
+                    entrada.month == date.getMonth() ?
+                      <div className="row-despesa" key={index}>
+                        <div className="descricao-despesa">
+                          {entrada.descricao}
+                        </div>
+                        <div className="valor-despesa">
+                          {`R$ ${entrada.valor.toFixed(2)}`}
+                        </div>
+                        <div className="data-despesa">
+                          {`${entrada.day.toString().padStart(2, '0')}/${(entrada.month + 1).toString().padStart(2, '0')}/${entrada.year}`}
+                        </div>
+                        <div className="excluir">
+                          <button className='button-excluir-despesa' id={`${entrada._id}`} onClick={excluirEntrada}>
                             <svg className="excluir" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" ></g><g id="SVGRepo_tracerCarrier" ></g><g id="SVGRepo_iconCarrier"><path d="M4.99997 8H6.5M6.5 8V18C6.5 19.1046 7.39543 20 8.5 20H15.5C16.6046 20 17.5 19.1046 17.5 18V8M6.5 8H17.5M17.5 8H19M9 5H15M9.99997 11.5V16.5M14 11.5V16.5" stroke="#b71010" ></path></g></svg>
                           </button>
                         </div>
@@ -879,7 +1056,7 @@ function App() {
                     </div>
                   ))
                 }
-                <div style={{ backgroundColor: weakColor ,fontWeight: '700', marginTop: '10px', borderRadius: '10px', padding: '2px 0px'}} className="row-title-total" >
+                <div style={{ backgroundColor: weakColor, fontWeight: '700', marginTop: '10px', borderRadius: '10px', padding: '2px 0px' }} className="row-title-total" >
                   <div className="data-total">
                     TOTAL
                   </div>

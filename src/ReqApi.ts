@@ -20,6 +20,15 @@ interface Agendamento {
     year: number;
     idUser?: string;
   }
+  interface Entradas {
+    _id?: string;
+    descricao: string;
+    valor: number;
+    day: number;
+    month: number;
+    year: number;
+    idUser?: string;
+  }
 
 interface User {
     _id?: string;
@@ -81,5 +90,17 @@ export const ReqApi = {
     getUserByEmail: async (email: string) => {
         let response = await http.get(`/users/email/${email}`);
         return response.data;
-    }
+    },
+    getAllEntradas: async (_id: string) => {
+        let response = await http.get(`/entradas/${_id}`)
+        return response.data;
+    },
+    createEntrada: async (entrada: Entradas) => {
+        let response = await http.post(`/entradas/create`, entrada);
+        return response.data;
+    },
+    deleteEntrada: async (_id: string) => {
+        let response = await http.delete(`/entradas/${_id}`);
+        return response.data;
+    },
 }

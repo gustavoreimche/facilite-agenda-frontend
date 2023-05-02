@@ -19,9 +19,11 @@ type Props = {
     hardColor: string
     openModalDespesa: () => void;
     openModalTotal: () => void;
-    openModalEntradas?: () => void;
+    openModalEntrada: () => void;
+    openModalDespesas: () => void;
+    openModalEntradas: () => void;
 }
-export default function AccountMenu({ hardColor, openModalDespesa, openModalEntradas, openModalTotal }: Props) {
+export default function AccountMenu({ hardColor, openModalDespesa, openModalEntradas, openModalTotal, openModalDespesas, openModalEntrada }: Props) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -42,7 +44,7 @@ export default function AccountMenu({ hardColor, openModalDespesa, openModalEntr
 
     return (
         <React.Fragment>
-            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center'}}>
+            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
                 <Tooltip title="Account settings">
                     <IconButton
                         onClick={handleClick}
@@ -92,50 +94,50 @@ export default function AccountMenu({ hardColor, openModalDespesa, openModalEntr
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 <MenuItem onClick={handleClose}>
-                    <Avatar sx={{ color: hardColor}}/> {name}
+                    <Avatar sx={{ color: hardColor }} /> {name}
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={openModalEntradas}>
+                <MenuItem onClick={openModalEntrada}>
                     <ListItemIcon>
-                        <AttachMoneyIcon fontSize='small' sx={{ color: hardColor}}/>
+                        <AttachMoneyIcon fontSize='small' sx={{ color: 'green' }} />
                     </ListItemIcon>
-                    Entradas
+                    Cadastrar entrada
                 </MenuItem>
                 <MenuItem onClick={openModalEntradas}>
                     <ListItemIcon>
-                        <AttachMoneyIcon fontSize='small' sx={{ color: hardColor}} />
+                        <AttachMoneyIcon fontSize='small' sx={{ color: 'green' }} />
                     </ListItemIcon>
                     Listar Entradas
                 </MenuItem>
                 <MenuItem onClick={openModalDespesa}>
                     <ListItemIcon>
-                        <AttachMoneyIcon fontSize='small' sx={{ color: hardColor}} />
+                        <AttachMoneyIcon fontSize='small' sx={{ color: 'red' }} />
                     </ListItemIcon>
-                    Despesas
+                    Cadastrar despesa
                 </MenuItem>
-                <MenuItem onClick={openModalDespesa}>
+                <MenuItem onClick={openModalDespesas}>
                     <ListItemIcon>
-                        <AttachMoneyIcon fontSize='small' sx={{ color: hardColor}} />
+                        <AttachMoneyIcon fontSize='small' sx={{ color: 'red' }} />
                     </ListItemIcon>
                     Listar Despesas
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={openModalTotal}>
                     <ListItemIcon>
-                        <AttachMoneyIcon fontSize='small' sx={{ color: hardColor}} />
+                        <AttachMoneyIcon fontSize='small' sx={{ color: hardColor }} />
                     </ListItemIcon>
                     Relatório Mensal
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleClose}>
                     <ListItemIcon>
-                        <Settings fontSize="small" sx={{ color: hardColor}}/>
+                        <Settings fontSize="small" sx={{ color: hardColor }} />
                     </ListItemIcon>
                     Settings
                 </MenuItem>
                 <MenuItem onClick={logout}>
                     <ListItemIcon>
-                        <Logout fontSize="small" sx={{ color: hardColor}}/>
+                        <Logout fontSize="small" sx={{ color: hardColor }} />
                     </ListItemIcon>
                     Logout
                 </MenuItem>

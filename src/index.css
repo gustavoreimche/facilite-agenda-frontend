@@ -441,6 +441,7 @@ input[type=number]{
 
 .descricao-despesa{
   flex: 2;
+  text-align: start;
 }
 
 .valor-despesa{
@@ -645,6 +646,10 @@ h1 {
 
 .footer label{
   color: inherit;
+}
+
+.area-despesas{
+  text-align: center;
 }
 
 .entradas, .despesas{

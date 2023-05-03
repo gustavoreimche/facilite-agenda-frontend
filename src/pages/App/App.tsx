@@ -1079,18 +1079,12 @@ function App() {
 
           <div className="footer">
             <div className="entradas">
-              <label htmlFor="" className="entradas-label">
-                ENTRADAS:
-              </label>
-              <div className="valor-entradas">
-                {`R$ ${reduceAgendaDay(date.getDate()).toFixed(2)}`}
-              </div>
             </div>
             <div className="despesas">
-              <label className="despesas-label" onClick={abrirModalDespesas}>
+              <label className="despesas-label" >
                 TOTAL DIA:
               </label>
-              <div className="despesas-valor" onClick={abrirModalDespesa}>
+              <div className="despesas-valor" >
                 {`R$ ${(reduceAgendaDay(date.getDate()) - reduceDespesaDay(date.getDate())).toFixed(2)}`}
               </div>
             </div>

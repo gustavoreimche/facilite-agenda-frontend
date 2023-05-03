@@ -7,6 +7,7 @@ import { Container } from '../../Components/Container'
 import { ReqApi } from '../../ReqApi'
 import { useAppSelector } from '../../redux/hooks/useAppSelector';
 import Cabecalho from '../../Components/Cabecalho';
+import FormCadastro from '../../Components/FormCadastro';
 
 interface Despesas {
   _id?: string;
@@ -27,7 +28,7 @@ interface Entradas {
   idUser?: string;
 }
 
-interface Agendamento {
+export interface Agendamento {
   _id?: string;
   day: number;
   month: number;
@@ -40,12 +41,6 @@ interface Agendamento {
   idUser: string
 }
 
-type State = {
-  nome: string;
-  valor: number;
-  servico: string;
-  hora: string
-};
 
 type StateDespesa = {
   descricao: string;
@@ -56,7 +51,7 @@ function App() {
 
   const [agenda, setAgenda] = useState<Agendamento[]>([]);
   const [despesas, setDespesas] = useState<Despesas[]>([]);
-  const [entradas, setEntradas] = useState<Despesas[]>([]);
+  const [entradas, setEntradas] = useState<Entradas[]>([]);
 
   const horarios = [
     {
@@ -250,172 +245,6 @@ function App() {
     setMoney(calculaMoney(agenda))
     setPix(calculaPix(agenda))
     setCard(calculaCard(agenda))
-  }
-
-  class FormCadastro extends React.Component {
-
-    state: State = {
-      nome: '',
-      valor: 0,
-      servico: '',
-      hora: ''
-    };
-
-    // typing on RIGHT hand side of =
-
-    onChangeNome = (e: React.FormEvent<HTMLInputElement>): void => {
-      this.setState({ nome: e.currentTarget.value });
-    };
-    onChangeValor = (e: React.FormEvent<HTMLInputElement>): void => {
-      this.setState({ valor: +(e.currentTarget.value) });
-    };
-    onChangeServico = (e: React.FormEvent<HTMLInputElement>): void => {
-      this.setState({ servico: e.currentTarget.value });
-    };
-
-    // atualizar formulario com os valores do agendaemento selecionado
-
-
-    public atulizaModal() {
-
-      let index = agendamentosRender.findIndex(agendamento => agendamento._id === ID)
-      if (index != -1) {
-        if (agendamentosRender[index].nome != '') {
-          this.state.nome = agendamentosRender[index].nome
-          this.state.servico = agendamentosRender[index].servico
-          this.state.hora = agendamentosRender[index].hora
-        } else {
-          this.state.hora = agendamentosRender[index].hora
-        }
-      }
-    }
-
-    // CADASTRA AGENDAMENTO
-    private onClickAdd = async () => {
-
-      let index = agendamentosRender.findIndex(item => item._id === ID);
-      let selectedAgendamento = agenda.find(item => item._id === ID)
-      let idLocal = agenda.findIndex(item => item._id === ID)
-      let newAgendamento: Agendamento = {
-        day: date.getDate(),
-        month: date.getMonth(),
-        year: date.getFullYear(),
-        hora: horarios[index].h,
-        nome: this.state.nome,
-        servico: this.state.servico,
-        valor: this.state.valor,
-        formaPag: 'none',
-        idUser: idUser
-      };
-      let temp = [...agenda]
-
-      if (selectedAgendamento) {
-        if (this.state.valor === 0) {
-          let r = confirm('Deseja realmente prosseguir sem valor?')
-          if (r) {
-            temp.splice(idLocal, 1)
-
-            selectedAgendamento.valor = this.state.valor
-            ReqApi.updateAgendamento(selectedAgendamento)
-            temp.push(selectedAgendamento)
-          }
-        } else {
-          temp.splice(idLocal, 1)
-
-          selectedAgendamento.valor = this.state.valor
-          ReqApi.updateAgendamento(selectedAgendamento)
-          temp.push(selectedAgendamento)
-        }
-
-      } else {
-        if (this.state.valor === 0) {
-          let r = confirm('Deseja realmente prosseguir sem valor?')
-          if (r) {
-            let response = ReqApi.createAgendamento(newAgendamento)
-            response.then(response => {
-              newAgendamento._id = response._id
-            })
-            temp.push(newAgendamento)
-          }
-        } else {
-          let response = ReqApi.createAgendamento(newAgendamento)
-          response.then(response => {
-            newAgendamento._id = response._id
-          })
-          temp.push(newAgendamento)
-        }
-      }
-      setAgenda(temp)
-      preencherArrayRender();
-      fecharModal();
-    };
-
-    //DELETA AGENDAMENTO SELECIONADO
-    onClickDelete = () => {
-      let index = agendamentosRender.findIndex(item => item._id === ID)
-
-      if (agendamentosRender[index].nome === '') {
-        alert('Não há o que excluir!')
-        fecharModal();
-      } else {
-        let r = confirm('Deseja realmente excluir o agendamento selecionado?')
-        if (r) {
-          ReqApi.deleteAgendamento(ID)
-
-          let temp = (agenda.filter(item => item._id !== agendamentosRender[index]._id))
-          setAgenda(agenda.filter(item => item._id !== agendamentosRender[index]._id))
-
-          setPix(calculaPix(temp))
-          setCard(calculaCard(temp))
-          setMoney(calculaMoney(temp))
-          setDate(date)
-          fecharModal()
-        } else {
-          setIsOpen(false)
-        }
-      }
-    }
-
-    verificaHora = () => {
-      let agendamento = agenda.find(item => item._id === ID)
-      if (agendamento) {
-        return agendamento.hora
-      } else {
-        return ''
-      }
-    }
-
-    render() {
-
-      this.atulizaModal();
-
-      return (
-        <div className='modal-area'>
-          <div className='row-titulo'>
-            <div className='close'>   </div>
-            <div className="titulo ">{`AGENDAMENTO - ${this.state.hora}`}</div>
-            <div className="close ">
-              <svg onClick={fecharModal} className='svg-close' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" ></g><g id="SVGRepo_tracerCarrier" ></g><g id="SVGRepo_iconCarrier"> <g id="Menu / Close_MD"> <path id="Vector" d="M18 18L12 12M12 12L6 6M12 12L18 6M12 12L6 18" stroke="#ffffff" ></path> </g> </g></svg>
-            </div>
-          </div>
-          <form action="" onSubmit={this.onClickAdd}>
-            <label className='label' htmlFor='nome'>Nome: </label><br />
-            <input autoFocus autoComplete='off' id='nome' type="text" value={this.state.nome} required onChange={this.onChangeNome} />
-            <br /><br />
-            <label className='label' htmlFor='servico'>Serivço</label><br />
-            <input type="text" value={this.state.servico} onChange={this.onChangeServico} />
-            <br /><br />
-            <label className='label' htmlFor='valor'>Valor: </label>
-            <input type="number" value={this.state.valor == 0 ? '' : (this.state.valor)} onChange={this.onChangeValor} />
-            <br /><br />
-            <div className="div-cadastrar-button">
-              <input className='cadastrar-button' type="submit" value={agenda.findIndex(item => item._id === ID) === -1 ? 'CADASTRAR' : 'ATUALIZAR'} />
-              <button className='cadastrar-button excluir-button' onClick={this.onClickDelete}>EXCLUIR</button>
-            </div>
-          </form>
-        </div>
-      );
-    }
   }
 
   class FormDespesa extends React.Component {
@@ -786,6 +615,71 @@ function App() {
     }, 0)
   }
 
+  const onClickAdd = (nome: string, servico: string, valor: number) => {
+    let index = agendamentosRender.findIndex(item => item._id === ID);
+    let selectedAgendamento = agenda.find(item => item._id === ID)
+    let idLocal = agenda.findIndex(item => item._id === ID)
+    let temp = [...agenda]
+
+
+
+    if (selectedAgendamento) {
+      temp.splice(idLocal, 1)
+      selectedAgendamento.nome = nome;
+      selectedAgendamento.servico = servico;
+      selectedAgendamento.valor = valor;
+      ReqApi.updateAgendamento(selectedAgendamento)
+      temp.push(selectedAgendamento)
+    } else {
+      let newAgendamento: Agendamento = {
+        day: date.getDate(),
+        month: date.getMonth(),
+        year: date.getFullYear(),
+        hora: horarios[index].h,
+        nome: nome,
+        servico: servico,
+        valor: valor,
+        formaPag: 'none',
+        idUser: idUser
+      };
+      let response = ReqApi.createAgendamento(newAgendamento)
+      response.then(response => {
+        newAgendamento._id = response._id
+      })
+      temp.push(newAgendamento)
+    }
+    setAgenda(temp)
+    preencherArrayRender();
+  }
+
+
+
+
+  //DELETA AGENDAMENTO SELECIONADO
+  const onClickDelete = () => {
+    let index = agendamentosRender.findIndex(item => item._id === ID)
+
+    if (agendamentosRender[index].nome === '') {
+      alert('Não há o que excluir!')
+      fecharModal();
+    } else {
+      let r = confirm('Deseja realmente excluir o agendamento selecionado?')
+      if (r) {
+        ReqApi.deleteAgendamento(ID)
+
+        let temp = (agenda.filter(item => item._id !== agendamentosRender[index]._id))
+        setAgenda(agenda.filter(item => item._id !== agendamentosRender[index]._id))
+
+        setPix(calculaPix(temp))
+        setCard(calculaCard(temp))
+        setMoney(calculaMoney(temp))
+        setDate(date)
+        fecharModal()
+      } else {
+        setIsOpen(true)
+      }
+    }
+  }
 
   return (
     <>
@@ -819,7 +713,12 @@ function App() {
             closeTimeoutMS={200}
 
           >
-            <FormCadastro />
+            <FormCadastro
+              agendamento={agendamentosRender.find(agendamento => agendamento._id === ID)}
+              fecharModal={fecharModal}
+              onClickAdd={onClickAdd}
+              onClickDelete={onClickDelete}
+            />
           </Modal>
 
           <Modal
@@ -1127,7 +1026,7 @@ function App() {
                     <svg className="separator" fill={hardColor} viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" ></g><g id="SVGRepo_tracerCarrier" ></g><g id="SVGRepo_iconCarrier"> <circle cx="16" cy="16" r="16"></circle> </g></svg>
                   </div>
                   <div className="col-price">
-                    {agendamento.valor == 0 ? '' : `R$ ${agendamento.valor.toFixed(2).toString().replace('.', ',')}`}
+                    {agendamento.valor === 0 ? '' : `R$ ${agendamento.valor.toFixed(2).toString().replace('.', ',')}`}
                   </div>
                   <div className="row-pag">
                     <label className="chk">

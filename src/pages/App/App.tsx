@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import React from 'react'
 import Modal from 'react-modal';
 import Calendar from 'react-calendar';
@@ -8,6 +8,7 @@ import { ReqApi } from '../../ReqApi'
 import { useAppSelector } from '../../redux/hooks/useAppSelector';
 import Cabecalho from '../../Components/Cabecalho';
 import FormCadastro from '../../Components/FormCadastro';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
 
 interface Despesas {
   _id?: string;
@@ -25,6 +26,7 @@ interface Entradas {
   day: number;
   month: number;
   year: number;
+  formaPag: string;
   idUser?: string;
 }
 
@@ -45,6 +47,12 @@ export interface Agendamento {
 type StateDespesa = {
   descricao: string;
   valor: number;
+};
+
+type StateEntrada = {
+  descricao: string;
+  valor: number;
+  formaPag: string;
 };
 
 function App() {
@@ -307,9 +315,10 @@ function App() {
   }
   class FormEntrada extends React.Component {
 
-    state: StateDespesa = {
+    state: StateEntrada = {
       descricao: '',
       valor: 0,
+      formaPag: ''
     };
 
     onChangeDescricao = (e: React.FormEvent<HTMLInputElement>): void => {
@@ -317,6 +326,10 @@ function App() {
     };
     onChangeValor = (e: React.FormEvent<HTMLInputElement>): void => {
       this.setState({ valor: +(e.currentTarget.value) });
+    };
+    onChangeFormaPag = (e: SelectChangeEvent<string>): void => {
+      console.log(e.target.value)
+      this.setState({ formaPag: e.target.value });
     };
 
     private onClickAdd = () => {
@@ -327,6 +340,7 @@ function App() {
         year: date.getFullYear(),
         descricao: this.state.descricao,
         valor: this.state.valor,
+        formaPag: this.state.formaPag,
         idUser
       }
 
@@ -351,9 +365,33 @@ function App() {
             <label className='label' htmlFor='descricao'>Descrição: </label><br />
             <input id='descricao' type="text" value={this.state.descricao} required onChange={this.onChangeDescricao} />
             <br /><br />
-            <label className='label' htmlFor='valor'>Valor: </label>
-            <input type="number" value={this.state.valor === 0 ? '' : (this.state.valor)} onChange={this.onChangeValor} />
-            <br /><br />
+            <div className="form-entrada-valor-pag-label">
+              <label className='label' htmlFor='valor'>Valor: </label>
+              <label className='label formaPag' >Forma Pag: </label>
+            </div>
+            <div className="form-entrada-valor-pag">
+              <input className='valor-entrada' type="number" value={this.state.valor === 0 ? '' : (this.state.valor)} onChange={this.onChangeValor} />
+              <FormControl>
+                <Select
+                  id="formaPag"
+                  className='forma-pag'
+                  value={this.state.formaPag}
+                  label="Forma Pagamento"
+                  onChange={this.onChangeFormaPag}
+                >
+                  <MenuItem value={'pix'}>Pix</MenuItem>
+                  <MenuItem value={'card'}>Cartão</MenuItem>
+                  <MenuItem value={'money'}>Dinheiro</MenuItem>
+                </Select>
+              </FormControl>
+              
+            </div>
+
+            <br />
+
+
+
+
             <div className="div-cadastrar-button">
               <input className='cadastrar-button' type="submit" value="CADASTRAR" />
               <div></div>
@@ -571,8 +609,6 @@ function App() {
   }
 
   function getDiasMes(month: number, year: number) {
-    month--;
-
     let date = new Date(year, month, 1);
     let days = [];
     while (date.getMonth() === month) {
@@ -614,6 +650,43 @@ function App() {
       return (currentValue.month == month) ? acumulator + currentValue.valor : acumulator
     }, 0)
   }
+
+  function reducePixMonth(month: number) {
+    let totalEntradas = entradas.reduce((acumulator, currentValue) => {
+      return (currentValue.day == date.getDate() && currentValue.month == month && currentValue.formaPag === 'pix') ? acumulator + currentValue.valor : acumulator
+    }, 0)
+
+    let totalAgenda = agenda.reduce((acumulator, currentValue) => {
+      return (currentValue.day == date.getDate() && currentValue.month == month && currentValue.formaPag === 'pix') ? acumulator + currentValue.valor : acumulator
+    }, 0)
+
+    return totalEntradas + totalAgenda
+  }
+
+  function reduceCardMonth(month: number) {
+    let totalEntradas = entradas.reduce((acumulator, currentValue) => {
+      return (currentValue.day == date.getDate() && currentValue.month == month && currentValue.formaPag === 'card') ? acumulator + currentValue.valor : acumulator
+    }, 0)
+
+    let totalAgenda = agenda.reduce((acumulator, currentValue) => {
+      return (currentValue.day == date.getDate() && currentValue.month == month && currentValue.formaPag === 'card') ? acumulator + currentValue.valor : acumulator
+    }, 0)
+
+    return totalEntradas + totalAgenda
+  }
+
+  function reduceMoneyMonth(month: number) {
+    let totalEntradas = entradas.reduce((acumulator, currentValue) => {
+      return (currentValue.month == month && currentValue.formaPag === 'money') ? acumulator + currentValue.valor : acumulator
+    }, 0)
+
+    let totalAgenda = agenda.reduce((acumulator, currentValue) => {
+      return (currentValue.month == month && currentValue.formaPag === 'money') ? acumulator + currentValue.valor : acumulator
+    }, 0)
+
+    return totalEntradas + totalAgenda
+  }
+
 
   const onClickAdd = (nome: string, servico: string, valor: number) => {
     let index = agendamentosRender.findIndex(item => item._id === ID);
@@ -875,7 +948,7 @@ function App() {
                     entrada.month == date.getMonth() ?
                       <div className="row-despesa" key={index}>
                         <div className="descricao-despesa">
-                          {entrada.descricao}
+                          {`${entrada.descricao} - ${entrada.formaPag}`}
                         </div>
                         <div className="valor-despesa">
                           {`R$ ${entrada.valor.toFixed(2)}`}
@@ -932,24 +1005,24 @@ function App() {
               <div className="body-despesa">
 
                 {
-                  getDiasMes(date.getMonth(), date.getFullYear()).map(el => (
-                    < div className="row-title-total" >
+                  getDiasMes(date.getMonth(), date.getFullYear()).map((day, index) => (
+                    < div className="row-title-total" key={index.toString()}>
                       <div className="data-total">
-                        {`${el.toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`}
+                        {`${day.toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`}
                       </div>
                       <div className="entradas-total">
                         {
-                          reduceAgendaDay(el) === 0 ? "" : <><span className='span-rs'>R$ </span><span className='span-valor'>{reduceAgendaDay(el).toFixed(2)}</span></>
+                          reduceAgendaDay(day) === 0 ? "" : <><span className='span-rs'>R$ </span><span className='span-valor'>{reduceAgendaDay(day).toFixed(2)}</span></>
                         }
                       </div>
                       <div className="despesas-total">
                         {
-                          reduceDespesaDay(el) === 0 ? "" : <><span className='span-rs'>R$ </span><span className='span-valor'>{reduceDespesaDay(el).toFixed(2)}</span></>
+                          reduceDespesaDay(day) === 0 ? "" : <><span className='span-rs'>R$ </span><span className='span-valor'>{reduceDespesaDay(day).toFixed(2)}</span></>
                         }
                       </div>
                       <div className="total-total">
                         {
-                          (reduceAgendaDay(el) - reduceDespesaDay(el)) === 0 ? '' : <><span className='span-rs'>R$ </span><span className='span-valor'>{(reduceAgendaDay(el) - reduceDespesaDay(el)).toFixed(2)}</span></>
+                          (reduceAgendaDay(day) - reduceDespesaDay(day)) === 0 ? '' : <><span className='span-rs'>R$ </span><span className='span-valor'>{(reduceAgendaDay(day) - reduceDespesaDay(day)).toFixed(2)}</span></>
                         }
                       </div>
                     </div>
@@ -1056,7 +1129,7 @@ function App() {
                 PIX:
               </label>
               <div className="total-valor">
-                {`R$ ${pix.toFixed(2)}`}
+                {`R$ ${reducePixMonth(date.getMonth()).toFixed(2)}`}
               </div>
             </div>
             <div className="pag-card">
@@ -1064,7 +1137,7 @@ function App() {
                 CARTÃO:
               </label>
               <div className="total-valor">
-                {`R$ ${card.toFixed(2)}`}
+                {`R$ ${reduceCardMonth(date.getMonth()).toFixed(2)}`}
               </div>
             </div>
             <div className="pag-money">
@@ -1072,7 +1145,7 @@ function App() {
                 DINHEIRO:
               </label>
               <div className="total-valor">
-                {`R$ ${money.toFixed(2)}`}
+                {`R$ ${(reduceMoneyMonth(date.getMonth()) - reduceDespesaMonth(date.getMonth())).toFixed(2)}`}
               </div>
             </div>
           </div>

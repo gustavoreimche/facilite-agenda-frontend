@@ -292,7 +292,6 @@ input[type=text]{
 
 input[type=number]{
   background-color: white;
-  width: 99%;
   border: none;
 }
 
@@ -686,10 +685,6 @@ h1 {
   align-items: center;
 }
 
-.despesas-label, .despesas-valor{
-  cursor: pointer;
-}
-
 
 .valor-entradas, .despesas-valor {
   background-color: inherit;
@@ -698,6 +693,34 @@ h1 {
   padding: 5px;
   height: max-content;
   width: 150px;
+}
+
+.form-entrada-valor-pag-label {
+  display: flex;
+  flex-direction: row;
+}
+
+.label.formaPag{
+  margin-left: 180px;
+}
+
+.form-entrada-valor-pag {
+  display: flex;
+  flex-direction: row;
+}
+
+.valor-entrada {
+  width: 50%;
+  margin-right: 20px;
+}
+
+#formaPag {
+  background-color: white;
+  width: 200px;
+  padding: 1px 2px;
+  height: 30px;
+  border-radius: 0;
+  color: black;
 }
 
 .total-valor{

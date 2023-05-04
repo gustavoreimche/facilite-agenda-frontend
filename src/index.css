@@ -840,4 +840,105 @@ button:focus-visible {
     .week{
       font-size: 10px;
     }
+    .total {
+      flex-direction: column;
+      padding-left: 0;
+    }
+    .footer {
+      flex-direction: column;
+      margin: 10px 0 0 0;
+      padding-right: 0;
+    }
+    .footer-site{
+      display: flex;
+      flex-direction: row;
+      font-size: 12px;
+    }
+    .pag-pix, .pag-card, .pag-money{
+      justify-content: space-between;
+      margin: 0 0 5px 0;
+      flex: 0;
+    }
+    .entradas-label, .despesas-label, .total-label {
+      margin: 0;
+    }
+    .entradas, .despesas{
+      justify-content: flex-start;
+      margin: 0 0 5px 0;
+      justify-content: space-between;
+    }
+    .total-valor {
+      width: 80px;
+    }
+    .menu-svg{
+      width: 30px;
+    }
+
+    .valor-entradas, .despesas-valor {
+      width: 80px;
+    }
+
+    .header .row {
+      font-size: 14px;
+    }
+
+    .separator {
+      width: 4px;
+    }
+
+    .modal-area{
+      font-size: 12px;
+    }
+
+    .modal {
+      width: 80vw;
+      height: 270px;
+    }
+
+    .titulo{
+      font-size: 14px;
+    }
+
+    .close {
+      width: 20px;
+    }
+
+    .modal-despesa {
+      width: 80vw;
+      height: 200px;
+    }
+
+    .label.formaPag{
+      margin-left: 108px;
+    }
+
+    .modal-despesas {
+      top: 20px;
+      width: 90vw;
+      font-size: 14px;
+      padding: 10px;
+    }
+
+    .descricao-despesa{
+      flex: 1;
+    }
+
+    .row-title {
+      font-size: 14px;
+    }
+
+    .area-despesas{
+      font-size: 11px;
+    }
+
+    .data-total, .entradas-total, .despesas-total, .total-total{
+      flex: 0.4;
+    }
+    .entradas-total, .despesas-total, .total-total{
+      padding: 0;
+      margin: 0 8px;
+    }
+    .title-total .data-total{
+      margin: 0;
+    }
 }

@@ -384,7 +384,7 @@ function App() {
                   <MenuItem value={'money'}>Dinheiro</MenuItem>
                 </Select>
               </FormControl>
-              
+
             </div>
 
             <br />
@@ -681,7 +681,7 @@ function App() {
     }, 0)
 
     let totalAgenda = agenda.reduce((acumulator, currentValue) => {
-      return (currentValue.day == date.getDate() && currentValue.month == date.getMonth()  && currentValue.formaPag === 'money') ? acumulator + currentValue.valor : acumulator
+      return (currentValue.day == date.getDate() && currentValue.month == date.getMonth() && currentValue.formaPag === 'money') ? acumulator + currentValue.valor : acumulator
     }, 0)
 
     return totalEntradas + totalAgenda
@@ -1135,59 +1135,62 @@ function App() {
             }
           </div>
 
-          <div className="total">
-            <div className="pag-pix">
-              <label htmlFor="" className="total-label">
-                PIX:
-              </label>
-              <div className="total-valor">
-                {`R$ ${reducePixDay().toFixed(2)}`}
-              </div>
-            </div>
-            <div className="pag-card">
-              <label htmlFor="" className="total-label">
-                CARTÃO:
-              </label>
-              <div className="total-valor">
-                {`R$ ${reduceCardDay().toFixed(2)}`}
-              </div>
-            </div>
-            <div className="pag-money">
-              <label htmlFor="" className="total-label">
-                DINHEIRO:
-              </label>
-              <div className="total-valor">
-                {`R$ ${reduceMoneyDay().toFixed(2)}`}
-              </div>
-            </div>
-          </div>
+          <div className="footer-site">
 
-          <div className="footer">
-            <div className="entradas">
-              <label className="despesas-label" >
-                CAIXA:
-              </label>
-              <div className="despesas-valor" >
-              {`R$ ${(reduceMoneyMonth(date.getMonth()) - reduceDespesaMonth(date.getMonth())).toFixed(2)}`}
+            <div className="total">
+              <div className="pag-pix">
+                <label htmlFor="" className="total-label">
+                  PIX:
+                </label>
+                <div className="total-valor">
+                  {`R$ ${reducePixDay().toFixed(2)}`}
+                </div>
               </div>
-            </div>
-            <div className="despesas">
-              <label className="despesas-label" >
-                TOTAL DIA:
-              </label>
-              <div className="despesas-valor" >
-                {`R$ ${(reduceAgendaDay(date.getDate()) - reduceDespesaDay(date.getDate())).toFixed(2)}`}
+              <div className="pag-card">
+                <label htmlFor="" className="total-label">
+                  CARTÃO:
+                </label>
+                <div className="total-valor">
+                  {`R$ ${reduceCardDay().toFixed(2)}`}
+                </div>
               </div>
-            </div>
-            <div className="despesas">
-              <label htmlFor="" className="total-label" onClick={abrirModalTotal}>
-                TOTAL MÊS:
-              </label>
-              <div className="despesas-valor">
-                {`R$ ${(reduceAgendaMonth(date.getMonth()) - reduceDespesaMonth(date.getMonth())).toFixed(2)}`}
+              <div className="pag-money">
+                <label htmlFor="" className="total-label">
+                  DINHEIRO:
+                </label>
+                <div className="total-valor">
+                  {`R$ ${reduceMoneyDay().toFixed(2)}`}
+                </div>
               </div>
             </div>
 
+            <div className="footer">
+              <div className="entradas">
+                <label className="despesas-label" >
+                  CAIXA:
+                </label>
+                <div className="despesas-valor" >
+                  {`R$ ${(reduceMoneyMonth(date.getMonth()) - reduceDespesaMonth(date.getMonth())).toFixed(2)}`}
+                </div>
+              </div>
+              <div className="despesas">
+                <label className="despesas-label" >
+                  TOTAL DIA:
+                </label>
+                <div className="despesas-valor" >
+                  {`R$ ${(reduceAgendaDay(date.getDate()) - reduceDespesaDay(date.getDate())).toFixed(2)}`}
+                </div>
+              </div>
+              <div className="despesas">
+                <label htmlFor="" className="total-label" onClick={abrirModalTotal}>
+                  TOTAL MÊS:
+                </label>
+                <div className="despesas-valor">
+                  {`R$ ${(reduceAgendaMonth(date.getMonth()) - reduceDespesaMonth(date.getMonth())).toFixed(2)}`}
+                </div>
+              </div>
+
+            </div>
           </div>
         </div >
       </Container >

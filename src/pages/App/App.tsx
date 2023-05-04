@@ -651,25 +651,37 @@ function App() {
     }, 0)
   }
 
-  function reducePixMonth(month: number) {
+  function reducePixDay() {
     let totalEntradas = entradas.reduce((acumulator, currentValue) => {
-      return (currentValue.day == date.getDate() && currentValue.month == month && currentValue.formaPag === 'pix') ? acumulator + currentValue.valor : acumulator
+      return (currentValue.day == date.getDate() && currentValue.month == date.getMonth() && currentValue.formaPag === 'pix') ? acumulator + currentValue.valor : acumulator
     }, 0)
 
     let totalAgenda = agenda.reduce((acumulator, currentValue) => {
-      return (currentValue.day == date.getDate() && currentValue.month == month && currentValue.formaPag === 'pix') ? acumulator + currentValue.valor : acumulator
+      return (currentValue.day == date.getDate() && currentValue.month == date.getMonth() && currentValue.formaPag === 'pix') ? acumulator + currentValue.valor : acumulator
     }, 0)
 
     return totalEntradas + totalAgenda
   }
 
-  function reduceCardMonth(month: number) {
+  function reduceCardDay() {
     let totalEntradas = entradas.reduce((acumulator, currentValue) => {
-      return (currentValue.day == date.getDate() && currentValue.month == month && currentValue.formaPag === 'card') ? acumulator + currentValue.valor : acumulator
+      return (currentValue.day == date.getDate() && currentValue.month == date.getMonth() && currentValue.formaPag === 'card') ? acumulator + currentValue.valor : acumulator
     }, 0)
 
     let totalAgenda = agenda.reduce((acumulator, currentValue) => {
-      return (currentValue.day == date.getDate() && currentValue.month == month && currentValue.formaPag === 'card') ? acumulator + currentValue.valor : acumulator
+      return (currentValue.day == date.getDate() && currentValue.month == date.getMonth() && currentValue.formaPag === 'card') ? acumulator + currentValue.valor : acumulator
+    }, 0)
+
+    return totalEntradas + totalAgenda
+  }
+
+  function reduceMoneyDay() {
+    let totalEntradas = entradas.reduce((acumulator, currentValue) => {
+      return (currentValue.day == date.getDate() && currentValue.month == date.getMonth() && currentValue.formaPag === 'money') ? acumulator + currentValue.valor : acumulator
+    }, 0)
+
+    let totalAgenda = agenda.reduce((acumulator, currentValue) => {
+      return (currentValue.day == date.getDate() && currentValue.month == date.getMonth()  && currentValue.formaPag === 'money') ? acumulator + currentValue.valor : acumulator
     }, 0)
 
     return totalEntradas + totalAgenda
@@ -1129,7 +1141,7 @@ function App() {
                 PIX:
               </label>
               <div className="total-valor">
-                {`R$ ${reducePixMonth(date.getMonth()).toFixed(2)}`}
+                {`R$ ${reducePixDay().toFixed(2)}`}
               </div>
             </div>
             <div className="pag-card">
@@ -1137,7 +1149,7 @@ function App() {
                 CARTÃO:
               </label>
               <div className="total-valor">
-                {`R$ ${reduceCardMonth(date.getMonth()).toFixed(2)}`}
+                {`R$ ${reduceCardDay().toFixed(2)}`}
               </div>
             </div>
             <div className="pag-money">
@@ -1145,13 +1157,19 @@ function App() {
                 DINHEIRO:
               </label>
               <div className="total-valor">
-                {`R$ ${(reduceMoneyMonth(date.getMonth()) - reduceDespesaMonth(date.getMonth())).toFixed(2)}`}
+                {`R$ ${reduceMoneyDay().toFixed(2)}`}
               </div>
             </div>
           </div>
 
           <div className="footer">
             <div className="entradas">
+              <label className="despesas-label" >
+                CAIXA:
+              </label>
+              <div className="despesas-valor" >
+              {`R$ ${(reduceMoneyMonth(date.getMonth()) - reduceDespesaMonth(date.getMonth())).toFixed(2)}`}
+              </div>
             </div>
             <div className="despesas">
               <label className="despesas-label" >

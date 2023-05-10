@@ -68,10 +68,10 @@ export default function SignUp() {
             console.log(user)
             let response = ReqApi.cadastraUser(user);
             response.then(response => {
-              dispatch(setAuth(true))
-              dispatch(setId(response._id))
-              dispatch(setNome(response.name))
-              navigate(`/app/user/${response.name}`)
+              dispatch(setAuth(response.isAuth));
+              dispatch(setId(response.result._id))
+              dispatch(setNome(response.result.name))
+              navigate(`/app/user/${response.result.name}`)
             })
           } else {
             alert('Email já cadastrado')

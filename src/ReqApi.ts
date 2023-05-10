@@ -98,15 +98,11 @@ export const ReqApi = {
 		return response.data;
 	},
 	cadastraUser: async (user: User) => {
-		let response = await axios.post(`${baseURL}/users/create`, user, {
-			headers: { Authorization: "Bearer " + localStorage.getItem("token") },
-		});
+		let response = await axios.post(`${baseURL}/users/create`, user);
 		return response.data;
 	},
 	getUserByEmail: async (email: string) => {
-		let response = await axios.get(`/${baseURL}users/email/${email}`, {
-			headers: { Authorization: "Bearer " + localStorage.getItem("token") },
-		});
+		let response = await axios.get(`${baseURL}/users/email/${email}`);
 		return response.data;
 	},
 	getAllEntradas: async (_id: string) => {

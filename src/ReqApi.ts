@@ -37,7 +37,7 @@ interface User {
 	password: string;
 }
 
-const baseURL = "http://localhost:3000";
+const baseURL = "https://rich-rose-lion-cap.cyclic.app";
 
 export const ReqApi = {
 	getAllAgendamentos: async (_id: string) => {
